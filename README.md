@@ -10,3 +10,4 @@ to do:
 - integrate infographics with backend
 - wiki
 - generate some useful content
+- 404 page
