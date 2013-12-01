@@ -1,99 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="getting things up to speed">
-    <meta name="author" content="treeherder">
+<meta charset="utf-8">
+<style>
 
-    <title>gardenplot's brief history</title>
-    <link href="../css/bootstrap.css" rel="stylesheet">
-    <link href="../css/gardenplot.css" rel="stylesheet">
-    <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  </head>
+svg {
+  font: 10px sans-serif;
+}
 
-  <body>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="../index.html">gardenplot</a>
-        </div>
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
 
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="../about.html">About</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">historia<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="../historia/index.html">home</a></li>
-                </ul>
-            </li><li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">wiki<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="../wiki/index.html">seeds and seedlings</a></li>
-                </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">projects <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-							  <li><a href="../growbot/index.html">grow technology</a></li>
-                <li><a href="../accum/index.html">bio-accumulation</a></li>
-                <li><a href="../bio-graphs/index.html">food gardening</a></li>
-                <li><a href="../share/index.html">sharing resources</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container -->
-    </nav>
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
 
-    <div class="container">
+</style>
+<body>
+<script src="http://gardenplot.info/js/d3.v3.min.js"></script>
+<script>
 
-      <div class="row">
+var n = 40,
+    random = d3.random.normal(0, .2),
+    data = d3.range(n).map(random);
 
-        <div class="col-lg-12">
-          <h1 class="page-header">Full Width Page <small>For Deeper Customization</small></h1>
-          <ol class="breadcrumb">
-            <li><a href="index.html">Home</a></li>
-            <li class="active">Full Width Page</li>
-          </ol>
-        </div>
+var margin = {top: 20, right: 20, bottom: 20, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-      </div>
+var x = d3.scale.linear()
+    .domain([0, n - 1])
+    .range([0, width]);
 
-      <div class="row">
+var y = d3.scale.linear()
+    .domain([-1, 1])
+    .range([height, 0]);
 
-        <div class="col-lg-12">template page
-        </div>
+var line = d3.svg.line()
+    .x(function(d, i) { return x(i); })
+    .y(function(d, i) { return y(d); });
 
-      </div>
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    </div><!-- /.container -->
+svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+  .append("rect")
+    .attr("width", width)
+    .attr("height", height);
 
-    <div class="container">
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + y(0) + ")")
+    .call(d3.svg.axis().scale(x).orient("bottom"));
 
-      <hr>
+svg.append("g")
+    .attr("class", "y axis")
+    .call(d3.svg.axis().scale(y).orient("left"));
 
-      <footer>
-        <div class="row">
-          <div class="col-lg-12">
-            <p>Copyright &copy; gardenplot 2013</p>
-          </div>
-        </div>
-      </footer>
+var path = svg.append("g")
+    .attr("clip-path", "url(#clip)")
+  .append("path")
+    .datum(data)
+    .attr("class", "line")
+    .attr("d", line);
 
-    </div><!-- /.container -->
+tick();
 
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/gardenplot.js"></script>
-  </body>
-</html>
+function tick() {
+
+  // push a new data point onto the back
+  data.push(random());
+
+  // redraw the line, and slide it to the left
+  path
+      .attr("d", line)
+      .attr("transform", null)
+    .transition()
+      .duration(500)
+      .ease("linear")
+      .attr("transform", "translate(" + x(-1) + ",0)")
+      .each("end", tick);
+
+  // pop the old data point off the front
+  data.shift();
+
+}
+
+</script>
