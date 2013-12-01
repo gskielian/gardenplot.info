@@ -22,6 +22,8 @@ svg {
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
+
 <script>
  
 var n = 40,
@@ -45,6 +47,9 @@ var line = d3.svg.line()
     .x(function(d, i) { return x(i); })
     .y(function(d, i) { return y(d); });
  
+
+
+
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -73,13 +78,19 @@ var path = svg.append("g")
     .attr("class", "line")
     .attr("d", line);
  
+var newdataref = new Firebase('https://testbed-firebase.firebaseio.com/Number');
+
 tick();
  
 function tick() {
+
+newdataref.on('value',function(snapshot) {
+  data.push(snapshot.val());
+  console.log(snapshot.val());
+});
  
   // push a new data point onto the back
-  data.push(random());
- 
+
   // redraw the line, and slide it to the left
   path
       .attr("d", line)
