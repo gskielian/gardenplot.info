@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
- 
+
+body {
+
+  background-color: black;
+} 
 svg {
   font: 10px sans-serif;
 }
  
 .line {
   fill: none;
-  stroke: #000;
+  stroke: #0fd;
   stroke-width: 1.5px;
 }
  
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: #a0a;
   shape-rendering: crispEdges;
 }
  
@@ -39,7 +43,7 @@ var x = d3.scale.linear()
     .range([0, width]);
  
 var y = d3.scale.linear()
-    .domain([-1, 1])
+    .domain([30, 60])
     .range([height, 0]);
  
 var line = d3.svg.line()
@@ -78,16 +82,25 @@ var path = svg.append("g")
     .attr("class", "line")
     .attr("d", line);
  
-var newdataref = new Firebase('https://testbed-firebase.firebaseio.com/Number');
+//var newdataref = new Firebase('https://testbed-firebase.firebaseio.com/Number');
+var weatherRef = new Firebase('https://publicdata-weather.firebaseio.com/sanfrancisco/currently');
+
+
 
 tick();
  
 function tick() {
 
-newdataref.on('value',function(snapshot) {
-  data.push(snapshot.val());
-  console.log(snapshot.val());
+//Updating from my firebase (less interesteing than bitcoin)
+//newdataref.on('value',function(snapshot) {
+//  data.push(snapshot.val());
+//  console.log(snapshot.val());
+//});
+weatherRef.child('temperature').on('value', function(snapshot) {
+    data.push(snapshot.val());
+    console.log('Temperature is currently ' + snapshot.val());
 });
+
  
   // push a new data point onto the back
 
@@ -96,7 +109,7 @@ newdataref.on('value',function(snapshot) {
       .attr("d", line)
       .attr("transform", null)
     .transition()
-      .duration(500)
+      .duration(1000) //this is where you set the transition time, also sets sample rate
       .ease("linear")
       .attr("transform", "translate(" + x(0) + ",0)")
       .each("end", tick);
