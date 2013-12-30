@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>d3 template</title>
+    <script type="text/javascript" src="d3.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+        var dataset = [ 1, 2, 3, 4, 5, 4, 3,2, 1];
+
+        //creating the svg
+        var w = 500;
+        var h = 100;
+
+        var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width",w)
+                    .attr("height",h);
+
+        var rectangles = svg.selectAll("rect")
+                            .data(dataset)
+                            .enter()
+                            .append("rect");
+
+        rectangles.attr("x", function(d ,i) {
+                        return (i*50) + 25;
+                    })
+                  .attr("y", h/2 )
+                  .attr("width", w/10)
+                  .attr("height", function (d) {
+                    return d*10;
+                  });
+
+</script>
+</body>
+</html>
+
