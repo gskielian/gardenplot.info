@@ -27,17 +27,16 @@
   </head>
   <body>
   <form>
-    <label><input type="radio" name="dataset" value="apples" checked> Durian </label>
-    <label><input type="radio" name="dataset" value="durian"> Jackfruit </label>
+    <label><input type="radio" name="dataset" value="durian" checked> Durian </label>
+    <label><input type="radio" name="dataset" value="jackfruit"> Jackfruit </label>
   </form>
     <script type="text/javascript">
       var w = 300;
       var h = 300;
       var r = Math.min(w,h)/2;
 
-      var color = d3.scale.category19();
+      var color = d3.scale.category20();
 
-      var pie = d3.layout.pie();
 
       var pie = d3.layout.pie()
                   .value( function(d) {return d.durian;} )
@@ -45,7 +44,7 @@
 
       var arc = d3.svg.arc()
                   .innerRadius(r - 100);
-                  .outerRadius(r-20);
+                  .outerRadius(r - 20);
 
       var svg = d3.select("body").append("svg")
                   .attr("width", w)
@@ -65,7 +64,7 @@
         .on("change", change);
 
         var timeout = setTimeout(function() {
-          d3.select("input[value=\"oranges\"]").property("checked", true).each(change)},2000);
+          d3.select("input[value=\"jackfruit\"]").property("checked", true).each(change)},2000);
 
         function change() {
           var value = this.value;
