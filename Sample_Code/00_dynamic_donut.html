@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>d3 template</title>
+    <script type="text/javascript" src="d3.min.js"></script>
+    <style>
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin: auto;
+        position: relative;
+        width: 300px;
+      }
+
+      text {
+        font: 10px sans-serif;
+      }
+
+      form {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+
+    </style>
+  </head>
+  <body>
+  <form>
+    <label><input type="radio" name="dataset" value="apples" checked> Durian </label>
+    <label><input type="radio" name="dataset" value="durian"> Jackfruit </label>
+  </form>
+    <script type="text/javascript">
+      var w = 300;
+      var h = 300;
+      var r = Math.min(w,h)/2;
+
+      var color = d3.scale.category19();
+
+      var pie = d3.layout.pie();
+
+      var pie = d3.layout.pie()
+                  .value( function(d) {return d.durian;} )
+                  .sort(null);
+
+      var arc = d3.svg.arc()
+                  .innerRadius(r - 100);
+                  .outerRadius(r-20);
+
+      var svg = d3.select("body").append("svg")
+                  .attr("width", w)
+                  .attr("height", h)
+                  .append("g")
+                  .attr("transform", "translate(" + w/2 + ',' + h/2 + ")");
+
+      d3.tsv("data.tsv", type, function (error,data) {
+        var path = svg.datum(data).selectAll("path")
+        .data(pie)
+        .enter()
+        .append("path")
+        .attr("fill", function(d,i) { return color(i); })
+        .attr("d", arc);
+
+        d3.selectAll("input")
+        .on("change", change);
+
+        var timeout = setTimeout(function() {
+          d3.select("input[value=\"oranges\"]").property("checked", true).each(change)},2000);
+
+        function change() {
+          var value = this.value;
+          clearTimeout(timeout);
+          pie.value(function(d) {return d[value] });// change the value function
+          path = path.data(pie); // calculates new angles
+         path.attr("d",arg); //redraws arcs
+        }
+      });
+
+
+      function type(d) {
+        d.durian = +d.durian; //+d.durian makes it a datapoint
+        d.jackfruit = +d.jackfruit;
+        return d;
+      }
+
+    </script>
+  </body>
+</html>
+
