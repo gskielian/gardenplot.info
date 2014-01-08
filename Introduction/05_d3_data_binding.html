@@ -1,0 +1,18 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>d3 template</title>
+    <script type="text/javascript" src="d3.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+        var dataset = [ 5, 10, 15, 20, 25 ];
+        d3.select("body").selectAll("p") // selectAll("p") will soon exist (none exist yet)
+          .data(dataset)  // gets the data, will do following methods once per datapoint
+          .enter() //in order to create data-bound elements
+          .append("p")
+          .text("Now each data has a paragraph"); //adds text to newly creted paragraph
+    </script>
+  </body>
+</html>
+
