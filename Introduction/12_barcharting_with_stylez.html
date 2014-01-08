@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>d3 template</title>
+
+    <script type="text/javascript" src="d3.min.js"></script>
+
+    <style type="text/css">
+      div.bar {
+        display: inline-block;
+        width: 20px;
+        height: 75px;
+        background-color: cyan;
+        /* added this here, since all bars need the margin-right*/
+        margin-right: 2px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <script type="text/javascript">
+      var dataset = [ 5, 10, 15, 20, 25];
+/*attr can set
+
+* class
+* id
+* src
+* width
+* height
+* alt
+...etc.
+
+*/
+      d3.select("body").selectAll("p")
+        .data(dataset)
+        .enter()
+        .append("div")
+        .attr("class", "bar")
+        .style("height", function (d) {
+          return d + "px";
+        });
+    </script>
+  </body>
+</html>
+

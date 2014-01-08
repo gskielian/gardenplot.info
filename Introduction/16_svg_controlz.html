@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>d3 template</title>
+    <script type="text/javascript" src="d3.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+        //dimensions of the svg canvas
+        var w = 600;
+        var h = 200;
+
+        //storing the reference to the svg
+        var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+        //binding data to circles, not yet drawn
+        var dataset = [ 13, 43, 53, 14, 55 ];
+        //reference to all the circles
+        var circles = svg.selectAll("circle")
+                         .data(dataset)
+                         .enter()
+                         .append("circle");
+        //DRAWING CIRCLES
+        circles.attr("cx", function(d, i) {
+                    return (i*100) + 25; //i is zero indexed
+                    })
+               .attr("cy", h/2) //h is the height of canvas
+               .attr("r", function(d) {
+                 return d;
+               })
+               .attr("fill", "rgb(0,255,255,0.5)" )
+               .attr("stroke", "grey")
+               .attr("stroke-width", function(d) {
+                 return d/2;
+               });
+
+
+
+
+
+    </script>
+  </body>
+</html>
+

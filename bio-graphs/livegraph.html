@@ -53,17 +53,12 @@ svg {
           <div class="col-lg-12">
 
 <script>
-var previous_time=0;  
+ 
 var n = 40,
     random = d3.random.normal(0, .2),
-    data = [];
-d3.csv("../dummy-db.csv", function(csvdata) {
-   data = csvdata.map(function(d,i) {
-    return +d["data"] ;
-    });
-    console.log(data);
+    data = d3.range(n).map(random);
  
-var margin = {top: 20, right: 20, bottom: 20, left: 100},
+var margin = {top: 20, right: 20, bottom: 20, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
  
@@ -72,7 +67,7 @@ var x = d3.scale.linear()
     .range([0, width]);
  
 var y = d3.scale.linear()
-    .domain([-1, 1000000])
+    .domain([-1, 1])
     .range([height, 0]);
  
 var line = d3.svg.line()
@@ -110,30 +105,19 @@ var path = svg.append("g")
     .datum(data)
     .attr("class", "line")
     .attr("d", line);
-//var newdataref = new Firebase('https://testbed-firebase.firebaseio.com/Number');
-setInterval(function () {tick()},1000);
+ 
+var newdataref = new Firebase('https://testbed-firebase.firebaseio.com/Number');
+
+tick();
+ 
 function tick() {
 
-/*newdataref.on('value',function(snapshot) {
+
+newdataref.on('value',function(snapshot) {
   data.push(snapshot.val());
   console.log(snapshot.val());
 });
-*/
-
-var dataset = [];
-
-d3.csv("../dummy-db.csv", function(csvdata) {
-  dataset = csvdata.map(function(d) {
-    return [ +d["time"], +d["data"] ];
-    });
-  newest_time=dataset[dataset.length-1][0];
-  newest_entry=dataset[dataset.length-1][1];
-  console.log(newest_time +"," +newest_entry);
-  if ( newest_time > previous_time) {
-  console.log("update attempted");
-    previous_time=newest_time;
-    data.push(newest_entry);
-
+ 
   // push a new data point onto the back
 
   // redraw the line, and slide it to the left
@@ -143,17 +127,13 @@ d3.csv("../dummy-db.csv", function(csvdata) {
     .transition()
       .duration(500)
       .ease("linear")
-      .attr("transform", "translate(" + x(0) + ",0)");
- //     .each("end", tick);
+      .attr("transform", "translate(" + x(0) + ",0)")
+      .each("end", tick);
  
   // pop the old data point off the front
   data.shift();
  
- } 
-});
 }
-
-});
  
 </script>
           </div>

@@ -23,7 +23,7 @@ svg {
 <body>
 <script src="http://gardenplot.info/js/d3.v3.min.js"></script>
 <script>
-
+var rollingnumber=0;
 var n = 40,
     random = d3.random.normal(0, .2),
     data = d3.range(n).map(random);
@@ -37,7 +37,7 @@ var x = d3.scale.linear()
     .range([0, width]);
 
 var y = d3.scale.linear()
-    .domain([-1, 1])
+    .domain([0, 1000000])
     .range([height, 0]);
 
 var line = d3.svg.line()
@@ -78,8 +78,17 @@ function tick() {
 
   // push a new data point onto the back
   data.push(random());
-
+/*
+var dataset = []
+  d3.csv("../dummy-db.csv", function(thedata) {
+     dataset = thedata.map(function(d) { 
+	return [ +d["time"],+d["data"] ];
+    // data.push(dataset[rollingnumber][1]);
+     rollingnumber++;
+     console.log(dataset[rollingnumber]);
+     });
   // redraw the line, and slide it to the left
+*/
   path
       .attr("d", line)
       .attr("transform", null)

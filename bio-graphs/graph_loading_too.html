@@ -110,8 +110,10 @@ var path = svg.append("g")
     .datum(data)
     .attr("class", "line")
     .attr("d", line);
+});
 //var newdataref = new Firebase('https://testbed-firebase.firebaseio.com/Number');
 setInterval(function () {tick()},1000);
+ 
 function tick() {
 
 /*newdataref.on('value',function(snapshot) {
@@ -128,9 +130,8 @@ d3.csv("../dummy-db.csv", function(csvdata) {
     });
   newest_time=dataset[dataset.length-1][0];
   newest_entry=dataset[dataset.length-1][1];
-  console.log(newest_time +"," +newest_entry);
+console.log(newest_time +"," +newest_entry);
   if ( newest_time > previous_time) {
-  console.log("update attempted");
     previous_time=newest_time;
     data.push(newest_entry);
 
@@ -152,8 +153,6 @@ d3.csv("../dummy-db.csv", function(csvdata) {
  } 
 });
 }
-
-});
  
 </script>
           </div>
